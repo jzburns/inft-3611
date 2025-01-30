@@ -16,10 +16,10 @@ resource "google_compute_instance_template" "template_example" {
     }
   }
 
-  # To avoid embedding secret keys or user credentials in the instances, Google recommends that you use custom service accounts
- with the following access scopes.
+  # To avoid embedding secret keys or user credentials in the instances, Google recommends that you use custom service accounts with the following access scopes.
   service_account {
     scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
+}
