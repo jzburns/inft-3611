@@ -1,5 +1,5 @@
 resource "google_compute_instance_template" "template_example" {
-  name         = "my-instance-template"
+  name         = var.template_name
   machine_type = "e2-standard-4"
 
   disk {
