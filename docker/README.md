@@ -15,3 +15,6 @@ Note the use of:
 ```docker push me-central1-docker.pkg.dev/inft-3611/inft-3611-dev-sec-ops/nginx-$USER```
 
 This should result in the image ``nginx-$USER`` being stored in the location as described above
+
+ ### Running the nginx docker in the GCP shell
+ ```docker run -d -p8080:80 me-central1-docker.pkg.dev/inft-3611/inft-3611-dev-sec-ops/nginx-$USER``
