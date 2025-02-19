@@ -1,3 +1,19 @@
+provider "google" {
+  project = "inft-3611"
+}
+
+# Enable Workflows API
+resource "google_project_service" "default" {
+  service            = "workflows.googleapis.com"
+  disable_on_destroy = false
+}
+
+# Create a dedicated service account
+resource "google_service_account" "default" {
+  account_id   = "sample-workflows-sa"
+  display_name = "Sample Workflows Service Account"
+}
+
 # Create a workflow
 resource "google_workflows_workflow" "default" {
   name            = "sample-workflow"
