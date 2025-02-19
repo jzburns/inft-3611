@@ -8,18 +8,12 @@ resource "google_project_service" "default" {
   disable_on_destroy = false
 }
 
-# Create a dedicated service account
-resource "google_service_account" "default" {
-  account_id   = "sample-workflows-sa"
-  display_name = "Sample Workflows Service Account"
-}
-
 # Create a workflow
 resource "google_workflows_workflow" "default" {
   name            = "sample-workflow"
   region          = "us-central1"
   description     = "A sample workflow"
-  service_account = google_service_account.default.id
+  service_account = "960957615762-compute@developer.gserviceaccount.com"
 
   deletion_protection = false # set to "true" in production
 
