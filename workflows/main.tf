@@ -10,7 +10,7 @@ resource "google_project_service" "default" {
 
 # Create a workflow
 resource "google_workflows_workflow" "default" {
-  name            = "sample-workflow"
+  name            = var.workflow_name
   region          = "us-central1"
   description     = "A sample workflow"
   service_account = "960957615762-compute@developer.gserviceaccount.com"
