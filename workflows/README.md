@@ -9,7 +9,7 @@ This example uses terraform to create and delete the workflow models. The standa
 1. ``terraform destroy`` : when you want to remove your components permanently
 
 ## Code example
-The code we will automate today is a simple yaml file:
+The code we will automate today is a simple yaml workflow that is already included in our ``main.tf``:
 
 ```
 # This is a sample workflow that you can replace with your source code
