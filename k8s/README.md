@@ -60,4 +60,13 @@ goldpinger   LoadBalancer   10.106.214.186   <pending>     8080:31162/TCP   4m16
 kubernetes   ClusterIP      10.96.0.1        <none>        443/TCP          4m49s
 ```
 
+Because we want to attach to the ``goldpinger`` service, we need to start the port-forwarder
+running. To this, just run the file provided:
+
+```
+./port-fwd.sh &
+```
+
+Now we can attach to the cluster using the default GCP web-preview tool, listening on port 8080.
+Let's review the cluster now
 
