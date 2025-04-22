@@ -46,3 +46,18 @@ kube-system   kube-scheduler-minikube            1/1     Running   0            
 kube-system   storage-provisioner                1/1     Running   1 (2m49s ago)   3m30s
 ```
 
+Next, we get a list of the services running on the cluster using this command:
+
+```
+kubectl get services
+```
+
+This should give us the following output:
+
+```
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+goldpinger   LoadBalancer   10.106.214.186   <pending>     8080:31162/TCP   4m16s
+kubernetes   ClusterIP      10.96.0.1        <none>        443/TCP          4m49s
+```
+
+
