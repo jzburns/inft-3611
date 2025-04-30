@@ -1,4 +1,4 @@
-## Short Introduction to ``minkikube``
+## Short Introduction to ``minikube``
 
 This is a simple demonstration of how to start using ``minikube``
 
