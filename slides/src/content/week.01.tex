@@ -1,0 +1,598 @@
+% =========================================================
+% Slides 1–5 (IEEE Citations with Keys)
+% =========================================================
+
+\section{Cloud as a Systems Discipline}
+
+% ---------------------------------------------------------
+\begin{frame}{Cloud Computing as a Systems Discipline}
+\begin{block}{Core Perspective}
+Cloud computing is fundamentally a \textbf{distributed systems discipline}, where correctness depends on algorithmic coordination across unreliable and asynchronous components.
+\end{block}
+
+\begin{itemize}
+    \item Cloud platforms behave more like planet-scale operating systems than virtualized datacenters \cite{verma2008large}.
+    \item Core constraints include:
+    \begin{itemize}
+        \item absence of globally consistent state,
+        \item nondeterministic event ordering,
+        \item continuous node and process churn.
+    \end{itemize}
+    \item These conditions require distributed algorithms that ensure convergence despite message delay and partial observability.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Cloud Requires Systems Thinking}
+\begin{alertblock}{Misconception}
+“Cloud computing is just servers in someone else’s datacenter.”
+\end{alertblock}
+
+\begin{itemize}
+    \item Large production systems (Google, AWS, Azure) operate under \textbf{persistent instability}: crashes, partitions, and restarts occur continuously \cite{hamilton2007lessons}.
+    \item Procedural logic assumes:
+    \begin{itemize}
+        \item linear execution,
+        \item reliable infrastructure,
+        \item timely intervention.
+    \end{itemize}
+    These assumptions fail at scale.
+    \item Correctness requires:
+    \begin{itemize}
+        \item idempotent operations,
+        \item eventual consistency,
+        \item monotonic state evolution \cite{lamport1978time}.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Cloud as a Large-Scale Operating System}
+\begin{block}{Analogy}
+Cloud control planes approximate operating system kernels, but operate across unreliable devices, asynchronous communication, and weak consistency.
+\end{block}
+
+\begin{itemize}
+    \item Responsibilities include:
+    \begin{itemize}
+        \item global workload scheduling \cite{verma2015borg},
+        \item policy governance,
+        \item identity and isolation,
+        \item reconciliation of desired and observed state.
+    \end{itemize}
+    \item Unlike local kernels, cloud systems cannot rely on:
+    \begin{itemize}
+        \item atomic memory,
+        \item global monotonic time,
+        \item reliable message delivery.
+    \end{itemize}
+    \item Correctness emerges from distributed convergence, not sequential execution.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Design Tensions in Cloud Architecture}
+\begin{exampleblock}{Structural Tensions}
+Global-scale systems must balance fundamental constraints that cannot be optimized simultaneously.
+\end{exampleblock}
+
+\begin{itemize}
+    \item \textbf{Consistency vs throughput:} strong consistency requires coordination, limiting parallelism \cite{gilbert2002brewer}.
+    \item \textbf{Elasticity vs predictability:} scaling shifts resource topology unpredictably.
+    \item \textbf{Automation vs visibility:} automation improves correctness but reduces operator observability.
+    \item \textbf{Availability vs correctness:} high availability often permits temporary inconsistency.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Scale Amplifies Complexity}
+\begin{block}{Scaling Reality}
+At cloud scale, rare events become constant. Small failure probabilities multiplied across millions of components produce continuous disturbances.
+\end{block}
+
+\begin{itemize}
+    \item Industry data shows that large fleets experience ongoing hardware and software faults \cite{beyer2016sre}.
+    \item The system behaves like a high-dimensional dynamical system under continuous perturbation.
+    \item Manual reasoning cannot track or correct drift at this speed.
+    \item Stability requires automated control loops that re-establish invariants despite ongoing disturbances.
+\end{itemize}
+\end{frame}
+
+
+% =========================================================
+% Slides 6–10
+% =========================================================
+
+\section{Why Scale Changes Everything}
+
+% ---------------------------------------------------------
+\begin{frame}{Continuous Perturbation as the Normal State}
+\begin{alertblock}{Operational Reality}
+At large scale, the system is \textbf{never quiescent}. Failures, recoveries, and timing anomalies form a continuous background process.
+\end{alertblock}
+
+\begin{itemize}
+    \item Node churn (joins, leaves, crashes) occurs constantly in large fleets \cite{hamilton2007lessons}.
+    \item Network delay, jitter, and loss vary dynamically across datacenter fabrics.
+    \item Clock skew accumulates between nodes, undermining assumptions about event ordering \cite{lamport1978time}.
+    \item Replicated components diverge due to nondeterministic propagation delays.
+    \item Systems must rely on convergence, not instantaneous correctness.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{The State Explosion Problem}
+\begin{block}{Key Idea}
+Cloud systems maintain multiple interacting state domains whose cross-product produces an intractably large global state space.
+\end{block}
+
+\begin{itemize}
+    \item State classes include:
+    \begin{itemize}
+        \item configuration state,
+        \item runtime and health state,
+        \item dependency and topology state,
+        \item policy and security state.
+    \end{itemize}
+    \item Even small inconsistencies can cascade across these interconnected layers.
+    \item Strongly consistent global snapshots require coordination mechanisms such as consensus \cite{lamport1978time}, which becomes expensive at scale.
+    \item Automated controllers are required to continually manage drift within this state space.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Limits of Manual Coordination}
+\begin{alertblock}{Human Limitation}
+Human operators cannot observe, reason about, or repair distributed state quickly enough to maintain correctness in highly concurrent environments.
+\end{alertblock}
+
+\begin{itemize}
+    \item Manual intervention introduces variable latency, allowing inconsistencies to widen.
+    \item Operators often apply partial or inconsistent fixes, unintentionally increasing drift.
+    \item Post-incident reports frequently attribute outages to configuration errors and slow reaction paths \cite{beyer2016sre}.
+    \item The rate of topological change exceeds human cognitive limits.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Automation Becomes Mandatory}
+\begin{exampleblock}{Benefits of Automated Controllers}
+Automation enforces system invariants at speeds and levels of consistency impossible for human operators.
+\end{exampleblock}
+
+\begin{itemize}
+    \item Automated controllers:
+    \begin{itemize}
+        \item detect drift immediately,
+        \item execute corrective actions uniformly,
+        \item operate continuously rather than episodically.
+    \end{itemize}
+    \item Organizations such as Google and AWS rely on continuous automated monitoring and reconciliation \cite{beyer2016sre}.
+    \item Automation transforms correctness from manual labor into a property maintained by algorithmic control.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Coordination as a Control Problem}
+\begin{block}{Control-Theoretic Interpretation}
+Distributed systems resemble feedback control systems, where noisy observations and delayed actions must still lead to stable behavior.
+\end{block}
+
+\begin{itemize}
+    \item The core loop: \textbf{Observe → Compare → Correct}.
+    \item Controllers must maintain stability under:
+    \begin{itemize}
+        \item partial observability,
+        \item asynchronous updates,
+        \item unpredictable disturbances,
+        \item variable execution latency.
+    \end{itemize}
+    \item The primary correctness property is \textbf{convergence}, not perfect instantaneous agreement.
+    \item This insight underpins modern control-plane architectures used in Kubernetes, Borg, and distributed service fabrics.
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% Slides 11–15
+% =========================================================
+
+\section{Failure as Design Input}
+
+% ---------------------------------------------------------
+\begin{frame}{Failure as a First-Class Property}
+\begin{alertblock}{Principle}
+In cloud environments, \textbf{failure is a continuous operating condition}, not an exceptional event.
+\end{alertblock}
+
+\begin{itemize}
+    \item Large-scale systems observe constant hardware faults, process exits, link failures, and retries \cite{hamilton2007lessons}.
+    \item Components fail independently, producing diverse and unpredictable patterns.
+    \item Software must assume that any communication, computation, or storage operation may not complete as expected.
+    \item Reliability emerges from redundancy, feedback loops, and corrective algorithms—never from individual component durability.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Partial Observability}
+\begin{block}{Fundamental Constraint}
+Distributed systems never possess a fully accurate, real-time global view of state.
+\end{block}
+
+\begin{itemize}
+    \item Observations are:
+    \begin{itemize}
+        \item delayed,
+        \item partial,
+        \item stale,
+        \item inconsistent across replicas.
+    \end{itemize}
+    \item Controllers must take action despite incomplete knowledge.
+    \item Event timestamps cannot be fully trusted due to clock skew and clock drift \cite{lamport1978time}.
+    \item Systems must be engineered to remain stable under uncertainty.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Resilient System Behavior}
+\begin{exampleblock}{Common Resilience Techniques}
+Distributed systems use operational properties that remain correct under retries, reordering, and partial execution.
+\end{exampleblock}
+
+\begin{itemize}
+    \item \textbf{Idempotent operations}: issuing the same update multiple times produces the same final state.
+    \item \textbf{Monotonic state transitions}: state evolves in one direction, tolerating out-of-order messages.
+    \item \textbf{Eventual convergence}: all replicas converge on a stable state after disturbances.
+    \item These principles strengthen correctness in the presence of nondeterministic failures and message delivery conditions.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Declarative Instead of Procedural}
+\begin{alertblock}{Issue}
+Procedural instructions rely on ordering guarantees that distributed systems cannot provide.
+\end{alertblock}
+
+\begin{itemize}
+    \item A sequence of procedural steps will fail if:
+    \begin{itemize}
+        \item messages are delayed,
+        \item node scheduling varies,
+        \item operations are retried,
+        \item partial failures interrupt execution.
+    \end{itemize}
+    \item Declarative intent defines the target invariant; controllers compute the needed transitions.
+    \item This shifts correctness from step-by-step execution toward long-run convergence \cite{lamport1978time}.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Intent as System Specification}
+\begin{block}{Definition}
+\textbf{Declarative intent} specifies the desired stable properties of the system rather than the sequence of steps to achieve them.
+\end{block}
+
+\begin{itemize}
+    \item Operators express targets such as:
+    \begin{itemize}
+        \item replica counts,
+        \item topology constraints,
+        \item policy and security requirements,
+        \item resource limits.
+    \end{itemize}
+    \item Controllers continuously reconcile observed state with this specification.
+    \item Self-healing behavior emerges because the intent remains stable even as the environment changes.
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% Slides 16–20
+% =========================================================
+
+\section{Desired vs Observed State}
+
+% ---------------------------------------------------------
+\begin{frame}{Intent Drift}
+\begin{exampleblock}{Sources of Drift}
+Differences between an operator’s declared intent and the system’s actual condition accumulate continuously in distributed environments.
+\end{exampleblock}
+
+\begin{itemize}
+    \item Causes of drift:
+    \begin{itemize}
+        \item node failures and evictions,
+        \item message delays and reordering,
+        \item resource contention,
+        \item propagation latency between replicas.
+    \end{itemize}
+    \item Drift is unavoidable; systems must detect and correct it rather than assume stable state.
+    \item Persistent automated reconciliation is required to maintain correctness at scale.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Desired State}
+\begin{block}{Definition}
+The \textbf{desired state} is the operator-defined specification of how the system should behave under correct conditions.
+\end{block}
+
+\begin{itemize}
+    \item Examples:
+    \begin{itemize}
+        \item “Maintain 5 replicas of service X.”
+        \item “Ensure all nodes enforce network policy Y.”
+        \item “Keep workloads within zone and quota constraints.”
+    \end{itemize}
+    \item The desired state is stable, declarative, and often version-controlled.
+    \item It acts as the reference point for control-plane decisions.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Observed State}
+\begin{alertblock}{Reality}
+The \textbf{observed state} reflects the system’s actual behavior but is always partial, stale, and approximate in distributed environments.
+\end{alertblock}
+
+\begin{itemize}
+    \item Observed state is influenced by:
+    \begin{itemize}
+        \item network delays,
+        \item local caching,
+        \item clock skew,
+        \item inconsistent updates across replicas.
+    \end{itemize}
+    \item No controller sees the whole cluster instantaneously.
+    \item Decision making must tolerate incomplete, outdated, or ambiguous observations \cite{lamport1978time}.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{State Comparison}
+\begin{exampleblock}{Mechanism}
+Control planes continuously compute corrective actions based on the difference:
+\[
+\text{Correction} = \text{Desired State} - \text{Observed State}
+\]
+\end{exampleblock}
+
+\begin{itemize}
+    \item Controllers identify:
+    \begin{itemize}
+        \item missing resources (under-replication),
+        \item excess resources (over-provisioning),
+        \item inconsistent policy or configuration.
+    \end{itemize}
+    \item This differential approach is robust to reordering and partial failure.
+    \item Reconciliation logic is idempotent and monotonic, enabling safe repeated execution.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Reconciliation Loop}
+\begin{block}{Control Loop Model}
+The canonical control-plane loop:
+\[
+\textbf{Observe} \rightarrow \textbf{Compare} \rightarrow \textbf{Correct}
+\]
+drives convergence toward the declared intent.
+\end{block}
+
+\begin{itemize}
+    \item Controllers re-evaluate state continuously, not on demand.
+    \item Reconciliation absorbs disturbances caused by failures, delays, and nondeterministic event ordering.
+    \item Long-term correctness is achieved through \textbf{eventual convergence}, not perfect instantaneous agreement \cite{beyer2016sre}.
+    \item This strategy underlies modern systems such as Kubernetes, Borg, and Mesos.
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% Slides 21–25
+% =========================================================
+
+\section{Idempotence, Coordination, and Case Studies}
+
+% ---------------------------------------------------------
+\begin{frame}{Idempotence and Safety}
+\begin{alertblock}{Key Principle}
+Corrective operations must be \textbf{idempotent}: safe to repeat, reorder, or retry without producing unintended side effects.
+\end{alertblock}
+
+\begin{itemize}
+    \item Idempotence protects correctness when:
+    \begin{itemize}
+        \item messages are duplicated,
+        \item operations are retried,
+        \item partial failures interrupt updates,
+        \item controllers race to modify shared state.
+    \end{itemize}
+    \item Modern control-plane implementations, including Borg and Kubernetes, rely heavily on idempotent handlers for stable reconciliation \cite{verma2015borg}.
+    \item Idempotence forms the “safety net” for distributed convergence.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Distributed Reconciliation Dynamics}
+\begin{exampleblock}{Challenges in Multi-Controller Systems}
+Multiple controllers operate concurrently and may interact in unexpected ways.
+\end{exampleblock}
+
+\begin{itemize}
+    \item Risks include:
+    \begin{itemize}
+        \item oscillation (controllers undo each other's changes),
+        \item race conditions in shared state,
+        \item inconsistent enforcement of cross-cutting policies.
+    \end{itemize}
+    \item Stability requires:
+    \begin{itemize}
+        \item clearly defined ownership of state domains,
+        \item deterministic conflict-resolution strategies,
+        \item eventually consistent propagation of updates.
+    \end{itemize}
+    \item Formal reasoning increasingly informs the design of modern controllers \cite{gilbert2002brewer}.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Case Study: Replica Restoration}
+\begin{block}{Scenario}
+A replicated service must maintain the invariant: \textbf{exactly $N$ healthy replicas} should exist.
+\end{block}
+
+\begin{itemize}
+    \item Failure events remove replicas (crashes, eviction, unreachable nodes).
+    \item The observed state becomes: actual replicas $< N$.
+    \item Controllers perform:
+    \begin{itemize}
+        \item detection of missing replicas,
+        \item scheduling or placement decisions,
+        \item instantiation of new replicas.
+    \end{itemize}
+    \item Even under partial failure, the system converges back to the declared invariant through automated reconciliation.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Case Study: Policy Enforcement Under Failure}
+\begin{exampleblock}{Scenario}
+A network or security policy must be enforced globally, but partial failures lead to inconsistent rule deployment.
+\end{exampleblock}
+
+\begin{itemize}
+    \item Individual nodes may:
+    \begin{itemize}
+        \item fail to apply required rules,
+        \item apply outdated or conflicting rules,
+        \item lose local state due to restart or eviction.
+    \end{itemize}
+    \item Controllers detect drift via periodic inspection and update propagation.
+    \item Convergence resembles epidemic or anti-entropy protocols used in distributed databases \cite{gilbert2002brewer}.
+    \item The system gradually restores global policy consistency without manual intervention.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Case Study: Elastic Scaling}
+\begin{block}{Scenario}
+Workload load increases or decreases, triggering an elasticity policy governed by declarative constraints.
+\end{block}
+
+\begin{itemize}
+    \item The desired state encodes elasticity bounds (min/max replicas, scaling rules).
+    \item The observed state reflects resource saturation or underutilization.
+    \item Controllers:
+    \begin{itemize}
+        \item resize replica sets,
+        \item redistribute load,
+        \item rebalance across zones or failure domains.
+    \end{itemize}
+    \item Elastic scaling loops must avoid oscillation and ensure stable response dynamics \cite{beyer2016sre}.
+\end{itemize}
+\end{frame}
+
+% =========================================================
+% Slides 26–30
+% =========================================================
+
+\begin{frame}{Self-Stabilizing Control Planes}
+\begin{alertblock}{Insight}
+Modern cloud control planes approximate \textbf{self-stabilizing distributed systems} that converge toward correctness from arbitrary states.
+\end{alertblock}
+
+\begin{itemize}
+    \item The concept originates from Dijkstra’s theory of self-stabilization.
+    \item Control planes repeatedly correct drift through reconciliation loops.
+    \item Convergence occurs despite:
+    \begin{itemize}
+        \item stale data,
+        \item transient inconsistency,
+        \item partial failures,
+        \item message reordering.
+    \end{itemize}
+    \item This explains why declarative cloud systems recover automatically from widespread disturbances.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Why Declarative Control Dominates}
+\begin{block}{Architectural Reasoning}
+Declarative control is the only scalable strategy for correctness in asynchronous, failure-prone environments.
+\end{block}
+
+\begin{itemize}
+    \item Step-by-step procedural logic breaks under concurrency, races, and retries.
+    \item Declarative intent provides a stable “truth anchor” for reconciliation.
+    \item Long-run correctness derives from the convergence of multiple controllers acting independently.
+    \item This pattern underlies the design of Kubernetes, Borg, Mesos, and large cloud fabrics \cite{verma2015borg}.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Summary of Week 1}
+\begin{alertblock}{Key Takeaways}
+\begin{itemize}
+    \item Cloud computing must be analyzed as a distributed systems discipline.
+    \item Scale introduces continuous failure, partial observability, and nondeterminism.
+    \item Declarative intent defines system invariants; observed state reflects imperfect reality.
+    \item Reconciliation (Observe → Compare → Correct) is the core mechanism for achieving convergence.
+    \item Idempotence, monotonicity, and self-stabilization ensure robustness under reordering and retries.
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{Suggested Activities}
+\begin{exampleblock}{Activities for Students}
+\begin{itemize}
+    \item Analyze a distributed system (e.g., Cassandra, etcd) and identify how it handles drift.
+    \item Explain how idempotence prevents race conditions and supports retries.
+    \item Compare reconciliation-based coordination vs consensus-based coordination.
+    \item Review an incident report and identify how declarative or procedural control contributed to system stability or instability.
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+% ---------------------------------------------------------
+\begin{frame}{End of Week 1}
+\centering
+\Large Questions? \\
+Discussion? \\
+Preparation for Week 2: Models of Distributed Computation
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+\begin{thebibliography}{99}
+
+\bibitem{verma2008large}
+A. Verma, L. Cherkasova, R. Campbell, and G. Shen,
+“Large-scale cluster management at Google,” 
+\emph{Proceedings of the 2008 International Conference on Autonomic Computing}, 2008.
+
+\bibitem{hamilton2007lessons}
+J. Hamilton,
+“On Designing and Deploying Internet-Scale Services,” 
+\emph{Proceedings of the Large Installation System Administration Conference (LISA)}, 2007.
+
+\bibitem{lamport1978time}
+L. Lamport,
+“Time, Clocks, and the Ordering of Events in a Distributed System,” 
+\emph{Communications of the ACM}, vol. 21, no. 7, pp. 558–565, 1978.
+
+\bibitem{verma2015borg}
+A. Verma et al.,
+“Large-scale cluster management at Google with Borg,” 
+\emph{Proceedings of the European Conference on Computer Systems (EuroSys)}, 2015.
+
+\bibitem{gilbert2002brewer}
+S. Gilbert and N. Lynch,
+“Brewer’s conjecture and the feasibility of consistent, available, partition-tolerant web services,” 
+\emph{ACM SIGACT News}, vol. 33, no. 2, pp. 51–59, 2002.
+
+\bibitem{beyer2016sre}
+B. Beyer, C. Jones, J. Petoff, and N. R. Murphy,
+\emph{Site Reliability Engineering: How Google Runs Production Systems}.  
+O’Reilly Media, 2016.
+
+\end{thebibliography}
+\end{frame}
+
