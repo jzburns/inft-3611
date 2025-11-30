@@ -1,12 +1,13 @@
-\documentclass[aspectratio=169]{beamer}
+\documentclass[xcolor=dvipsnames]{beamer}
 
-% ------------------------------------------------------------
-% Encoding + Fonts (PREVENTS Undefined Control Sequence errors)
 % ------------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 % ------------------------------------------------------------
 % Appearance and Theme
 % ------------------------------------------------------------
@@ -21,12 +22,11 @@
 % ------------------------------------------------------------
 % Title Information
 % ------------------------------------------------------------
-\title[Week 1]{Week 1 — Cloud Computing as a Systems Discipline}
-\subtitle{Foundations: Scale, Failure, Declarative Control}
+\title{Production and Operations Management}
+\subtitle{INFT 3611}
 \author{Dr. J. Burns}
-\institute{INFT 3611}
-\date{\today}
 
+\newcommand{\czero}{}
 \newcommand{\ci}{Introduction}
 \newcommand{\cii}{Architectures}
 \newcommand{\ciii}{Processes}
@@ -72,6 +72,7 @@
 \end{frame}
 
 \includeslides{01}
+\includeslides{02}
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
